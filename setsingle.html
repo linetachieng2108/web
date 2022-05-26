@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SetSingle</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+{% include 'navbar.html' %}
+    <div class="container">
+        <section class="row">
+            <div class="col-md-3" style='padding:2%;'>
+                <img src="../static/{{row[10]}}" alt="" class="img-fluid img-thumbnail">
+
+            </div>
+            <div class="col-md-6" style="padding:2%;" >
+                <span style="color:grey;"><h4>{{row[2]}}</h4></span><br>
+                <h5>Description</h5>
+                <span>{{row[5]}}</span>
+                <br><br>
+                <p><b>Material</b>: <i>{{row[9]}}</i></p>
+
+                <p><b>Size: </b><i>{{row[7]}}</i></p>
+                <br>
+                <hr>
+
+
+
+
+
+
+
+            </div>
+            <div class="col-md-3" style="padding:2%;">
+                <label for="">Qtty</label><br>
+                <input type="number" placeholder="Qtty" class="form-control"><br>
+                <h4><b style="color:orange;">KES {{row[4]}}</b></h4>
+                <span style="color:grey;"><strike>KES {{row[3]}}</strike></span>
+                <br>
+                <b class="badge badge-success">5% Discount</b><br><br>
+                {% if session.user %}
+                <b>To purchase this item,enter your phone number below</b><br>
+                <form action="/mpesa_payment" method="post">
+                    <input type="tel" name="phone" placeholder="Enter your Phone i.e: +254..." required><br>
+                    <input type="hidden" value="{{row[4]}}" name="amount"><br>
+                    <input type="submit" value="Pay Now" class="btn btn-primary btn-lg btn-block">
+                </form>
+                <br>
+                {% else %}
+                    Login to Make Payment
+                {% endif %}
+                <input type="submit" value="ADD TO CART" class="btn btn-primary btn-lg btn-block"><br><br>
+
+
+            </div>
+
+        </section>
+        <br>
+    {% if session.user %}
+        <a href="/logout">Logout</a>
+
+        {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <ul class=flashes>
+                {% for message in messages %}
+                  <li class="text-success">{{ message }}</li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+        {% endwith %}
+
+        <section class="row">
+            <div class="col-md-6">
+                <form action="/reviews" method="post">
+                    <h4>
+                        Write a Review
+                    </h4>
+                    <input type="hidden" value="{{session.user}}" name="user">
+                    <input type="hidden" value="{{row[0]}}" name="product_id">
+                    <textarea name="message" id="" cols="30" rows="4" class="form-control"></textarea><br>
+                    <input type="submit" value="Send Review" class = "btn btn-success">
+                </form>
+
+            </div>
+
+        </section>
+    {% else %}
+        <b>Login to post a review <a href="/login">Login Here</a></b>
+    {% endif %}
+
+    </div>
+
+{% include 'footer.html' %}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+</body>
+</html>
